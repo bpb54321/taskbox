@@ -14,6 +14,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@storybook/test-runner": "^0.19.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -23,7 +24,8 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "init-msw": "msw init public/"
+    "init-msw": "msw init public/",
+    "test-storybook": "test-storybook"
   },
   "devDependencies": {
     "@storybook/addon-a11y": "^8.2.4",
