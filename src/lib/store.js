@@ -24,7 +24,7 @@ const TaskBoxData = {
  * You can read more about Redux Toolkit's slices in the docs:
  * https://redux-toolkit.js.org/api/createSlice
  */
-const TasksSlice = createSlice({
+export const TasksSlice = createSlice({
   name: "taskbox",
   initialState: TaskBoxData,
   reducers: {
@@ -41,6 +41,9 @@ const TasksSlice = createSlice({
 // The actions contained in the slice are exported for usage in our components
 export const { updateTaskState } = TasksSlice.actions;
 
+export const taskboxSliceReducerMapPortion = {
+  taskbox: TasksSlice.reducer,
+};
 /*
  * Our app's store configuration goes here.
  * Read more about Redux's configureStore in the docs:
@@ -48,7 +51,7 @@ export const { updateTaskState } = TasksSlice.actions;
  */
 const store = configureStore({
   reducer: {
-    taskbox: TasksSlice.reducer,
+    ...taskboxSliceReducerMapPortion,
   },
 });
 
