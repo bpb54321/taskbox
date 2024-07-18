@@ -16,7 +16,6 @@ function getNonArchivedTasks(tasks) {
 
 function selectTasks(state) {
   const tasks = state.taskbox.tasks;
-  // debugger;
   const nonArchivedTasks = getNonArchivedTasks(tasks);
   const tasksWithPinnedFirst = getTasksWithPinnedFirst(nonArchivedTasks);
   return tasksWithPinnedFirst;
@@ -26,15 +25,10 @@ function selectStatus(state) {
   return state.taskbox.status;
 }
 
-function selectFocusedTaskIndex(state) {
-  return state.taskbox.focusedTaskIndex;
-}
-
 export default function TaskList() {
   const dispatch = useDispatch();
   const tasks = useSelector(selectTasks);
   const status = useSelector(selectStatus);
-  const focusedTaskIndex = useSelector(selectFocusedTaskIndex);
 
   const pinTask = (id) => {
     dispatch(updateTaskState({ id, newTaskState: "TASK_PINNED" }));
@@ -79,13 +73,12 @@ export default function TaskList() {
 
   return (
     <div className="list-items">
-      {getTasksWithPinnedFirst(tasks).map((task, taskIndex) => (
+      {tasks.map((task) => (
         <Task
           key={task.id}
           task={task}
           onArchiveTask={() => archiveTask(task.id)}
           onPinTask={() => pinTask(task.id)}
-          isFocused={taskIndex === focusedTaskIndex}
         />
       ))}
     </div>

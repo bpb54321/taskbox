@@ -11,16 +11,13 @@ const TaskBoxData = {
   tasks: [],
   status: "idle",
   error: null,
-  focusedTaskIndex: 0,
 };
 
 export const fetchTasks = createAsyncThunk("todos/fetchTodos", async () => {
   const response = await fetch(
     "https://jsonplaceholder.typicode.com/todos?userId=1"
   );
-  //   debugger;
   const data = await response.json();
-  //   debugger;
   const result = data.map((task) => ({
     id: `${task.id}`,
     title: task.title,
@@ -41,16 +38,19 @@ export const TasksSlice = createSlice({
     updateTaskState: (state, action) => {
       const { id, newTaskState } = action.payload;
       const taskIndex = state.tasks.findIndex((task) => task.id === id);
-      console.log(`current state.focusedTaskIndex: ${state.focusedTaskIndex}`);
-      if (taskIndex >= 0) {
-        state.tasks[taskIndex].state = newTaskState;
 
-        if (taskIndex + 1 < state.tasks.length) {
-          state.focusedTaskIndex = taskIndex + 1;
-        } else {
-          state.focusedTaskIndex = 0;
+      if (taskIndex >= 0) {
+        const currentTask = state.tasks[taskIndex];
+        currentTask.state = newTaskState;
+        currentTask.isFocused = false;
+
+        for (let index = taskIndex + 1; index < state.tasks.length; index++) {
+          const nextTask = state.tasks[index];
+          if (nextTask.state !== "TASK_ARCHIVED") {
+            nextTask.isFocused = true;
+            break;
+          }
         }
-        console.log(`new state.focusedTaskIndex: ${state.focusedTaskIndex}`);
       }
     },
   },
@@ -66,7 +66,6 @@ export const TasksSlice = createSlice({
         state.tasks = [];
       })
       .addCase(fetchTasks.fulfilled, (state, action) => {
-        // debugger;
         state.status = "succeeded";
         state.error = null;
         // Add any fetched tasks to the array

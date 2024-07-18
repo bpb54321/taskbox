@@ -4,10 +4,9 @@ import { useRef, useEffect } from "react";
 const TASK_ARCHIVED = "TASK_ARCHIVED";
 
 export default function Task({
-  task: { id, title, state },
+  task: { id, title, state, isFocused },
   onArchiveTask,
   onPinTask,
-  isFocused,
 }) {
   const checkboxRef = useRef(null);
   useEffect(() => {
@@ -74,6 +73,7 @@ Task.propTypes = {
     title: PropTypes.string.isRequired,
     /** Current state of the task */
     state: PropTypes.string.isRequired,
+    isFocused: PropTypes.bool.isRequired,
   }),
   /** Event to change the task to archived */
   onArchiveTask: PropTypes.func,
