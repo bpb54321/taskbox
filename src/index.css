@@ -139,10 +139,13 @@ textarea {
   width: 44px;
 }
 
-.checkbox input[type="checkbox"] {
+.checkbox input[type="checkbox"],
+.checkbox label {
+  display: block;
   font-size: 1em;
   width: 0;
   height: 0;
+  overflow: hidden;
 }
 
 .checkbox input[type="checkbox"] + span:before {

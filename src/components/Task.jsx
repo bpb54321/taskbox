@@ -1,4 +1,5 @@
-import PropTypes from "prop-types";
+import PropTypes, { instanceOf } from "prop-types";
+import { useRef, useEffect } from "react";
 
 const TASK_ARCHIVED = "TASK_ARCHIVED";
 
@@ -6,25 +7,37 @@ export default function Task({
   task: { id, title, state },
   onArchiveTask,
   onPinTask,
+  isFocused,
 }) {
+  const checkboxRef = useRef(null);
+  useEffect(() => {
+    if (isFocused && checkboxRef.current instanceof HTMLElement) {
+      checkboxRef.current.focus();
+    }
+  }, [isFocused]);
   return (
     <div className={`list-item ${state}`}>
-      <label
-        htmlFor={`task-checkbox-${id}`}
-        aria-label={"Task archived"}
-        className="checkbox"
-      >
+      <div className="checkbox">
+        <label htmlFor={`task-checkbox-${id}`}>Archive Task</label>
         <input
           type="checkbox"
           name="task-checkbox"
           id={`task-checkbox-${id}`}
           checked={state === TASK_ARCHIVED}
+          onChange={() => {
+            console.log("Real checkbox input changed");
+            onArchiveTask(id);
+          }}
+          ref={checkboxRef}
         />
         <span
           className="checkbox-custom"
-          onClick={() => onArchiveTask(id)}
+          onClick={() => {
+            console.log("Custom checkbox clicked");
+            onArchiveTask(id);
+          }}
         ></span>
-      </label>
+      </div>
       <label
         htmlFor={`task-title-${id}`}
         aria-label="Task title"
@@ -66,4 +79,5 @@ Task.propTypes = {
   onArchiveTask: PropTypes.func,
   /** Event to change the task to pinned */
   onPinTask: PropTypes.func,
+  isFocused: PropTypes.bool,
 };
