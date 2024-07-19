@@ -1,33 +1,14 @@
-import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectStatus,
+  selectTransformedTasks,
+  updateTaskState,
+} from "../lib/store";
 import Task from "./Task";
-import { useSelector, useDispatch } from "react-redux";
-import { updateTaskState } from "../lib/store";
-
-function getTasksWithPinnedFirst(tasks) {
-  return [
-    ...tasks.filter((t) => t.state === "TASK_PINNED"),
-    ...tasks.filter((t) => t.state !== "TASK_PINNED"),
-  ];
-}
-
-function getNonArchivedTasks(tasks) {
-  return tasks.filter((task) => task.state !== "TASK_ARCHIVED");
-}
-
-function selectTasks(state) {
-  const tasks = state.taskbox.tasks;
-  const nonArchivedTasks = getNonArchivedTasks(tasks);
-  const tasksWithPinnedFirst = getTasksWithPinnedFirst(nonArchivedTasks);
-  return tasksWithPinnedFirst;
-}
-
-function selectStatus(state) {
-  return state.taskbox.status;
-}
 
 export default function TaskList() {
   const dispatch = useDispatch();
-  const tasks = useSelector(selectTasks);
+  const tasks = useSelector(selectTransformedTasks);
   const status = useSelector(selectStatus);
 
   const pinTask = (id) => {
@@ -79,6 +60,7 @@ export default function TaskList() {
           task={task}
           onArchiveTask={() => archiveTask(task.id)}
           onPinTask={() => pinTask(task.id)}
+          isFocused={task.isFocused}
         />
       ))}
     </div>

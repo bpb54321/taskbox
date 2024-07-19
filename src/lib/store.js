@@ -5,6 +5,7 @@ import {
   configureStore,
   createSlice,
   createAsyncThunk,
+  createSelector,
 } from "@reduxjs/toolkit";
 
 const TaskBoxData = {
@@ -68,8 +69,10 @@ export const TasksSlice = createSlice({
       .addCase(fetchTasks.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = null;
-        // Add any fetched tasks to the array
-        state.tasks = action.payload;
+        state.tasks = action.payload.map((task) => ({
+          ...task,
+          isFocused: false,
+        }));
       })
       .addCase(fetchTasks.rejected, (state) => {
         state.status = "failed";
@@ -81,6 +84,28 @@ export const TasksSlice = createSlice({
 
 // The actions contained in the slice are exported for usage in our components
 export const { updateTaskState } = TasksSlice.actions;
+
+// Selectors
+export const selectStatus = (state) => state.taskbox.status;
+
+function getTasksWithPinnedFirst(tasks) {
+  return [
+    ...tasks.filter((t) => t.state === "TASK_PINNED"),
+    ...tasks.filter((t) => t.state !== "TASK_PINNED"),
+  ];
+}
+
+function getNonArchivedTasks(tasks) {
+  return tasks.filter((task) => task.state !== "TASK_ARCHIVED");
+}
+
+const selectTasks = (state) => state.taskbox.tasks;
+
+export const selectTransformedTasks = createSelector([selectTasks], (tasks) => {
+  const nonArchivedTasks = getNonArchivedTasks(tasks);
+  const tasksWithPinnedFirst = getTasksWithPinnedFirst(nonArchivedTasks);
+  return tasksWithPinnedFirst;
+});
 
 export const taskboxSliceReducerMapPortion = {
   taskbox: TasksSlice.reducer,

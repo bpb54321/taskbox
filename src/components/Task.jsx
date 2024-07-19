@@ -47,7 +47,7 @@ export default function Task({
           value={title}
           name="title"
           id={`task-title-${id}`}
-          placeholder="The title of your task"
+          readOnly
         />
       </label>
       {state !== TASK_ARCHIVED && (
