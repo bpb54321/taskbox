@@ -13,7 +13,7 @@ const defaultTasks = [
   { ...TaskStories.Default.args.task, id: "5", title: "Task 5" },
   { ...TaskStories.Default.args.task, id: "6", title: "Task 6" },
 ];
-const defaultTaskboxState = {
+export const defaultTaskboxState = {
   tasks: defaultTasks,
   status: "idle",
   error: null,
