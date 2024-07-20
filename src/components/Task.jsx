@@ -1,4 +1,4 @@
-import PropTypes, { instanceOf } from "prop-types";
+import PropTypes from "prop-types";
 import { useRef, useEffect } from "react";
 
 const TASK_ARCHIVED = "TASK_ARCHIVED";
@@ -15,7 +15,7 @@ export default function Task({
     }
   }, [isFocused]);
   return (
-    <div className={`list-item ${state}`}>
+    <div className={`list-item ${state}`} data-testid="task">
       <div className="checkbox">
         <label htmlFor={`task-checkbox-${id}`}>Archive Task</label>
         <input
@@ -24,7 +24,6 @@ export default function Task({
           id={`task-checkbox-${id}`}
           checked={state === TASK_ARCHIVED}
           onChange={() => {
-            console.log("Real checkbox input changed");
             onArchiveTask(id);
           }}
           ref={checkboxRef}
@@ -32,7 +31,6 @@ export default function Task({
         <span
           className="checkbox-custom"
           onClick={() => {
-            console.log("Custom checkbox clicked");
             onArchiveTask(id);
           }}
         ></span>
@@ -48,6 +46,7 @@ export default function Task({
           name="title"
           id={`task-title-${id}`}
           readOnly
+          data-testid="task-title"
         />
       </label>
       {state !== TASK_ARCHIVED && (
@@ -56,6 +55,7 @@ export default function Task({
           onClick={() => onPinTask(id)}
           id={`pin-task-button-${id}`}
           aria-label="Pin task"
+          data-testid="pin-task-button"
         >
           <span className="icon-star"></span>
         </button>
