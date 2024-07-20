@@ -33,9 +33,9 @@ function configureTaskboxStoreWithPreloadedState(preloadedState) {
 export default {
   component: TaskList,
   title: "TaskList",
-  decorators: [(story) => <div style={{ margin: "3rem" }}>{story()}</div>],
+  decorators: [],
   tags: ["autodocs"],
-  excludeStories: /.*MockedState$/,
+  excludeStories: ["defaultTaskboxState"],
 };
 
 export const Default = {
